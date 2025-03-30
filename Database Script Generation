@@ -1,3 +1,4 @@
+-- Tabel Filme
 CREATE TABLE Filme (
  FilmID NUMBER PRIMARY KEY,
  Titlu VARCHAR2(100) NOT NULL,
@@ -6,50 +7,41 @@ CREATE TABLE Filme (
  AnLansare NUMBER(4),
  Limba VARCHAR2(50)
 );
+
+
 -- Tabel Sali
 CREATE TABLE Sali (
  SalaID NUMBER PRIMARY KEY,
  Capacitate NUMBER NOT NULL,
- Ecran3D CHAR(1) CHECK (Ecran3D IN ('Y', 'N'))
+ FormatEcran VARCHAR2(20) CHECK (FormatEcran IN ('2D', '3D', 'IMAX'))
 );
+
 -- Tabel Clienti
-CREATE TABLE Clienti (
+CREATE TABLE ClientiFilme (
  ClientID NUMBER PRIMARY KEY,
  Nume VARCHAR2(50) NOT NULL,
  Prenume VARCHAR2(50),
- Telefon VARCHAR2(15) UNIQUE,
- Email VARCHAR2(100)
+ Telefon VARCHAR2(15) UNIQUE
 );
+
 -- Tabel Programari
 CREATE TABLE Programari (
  ProgramareID NUMBER PRIMARY KEY,
  FilmID NUMBER REFERENCES Filme(FilmID),
  SalaID NUMBER REFERENCES Sali(SalaID),
- OraProiectie DATE NOT NULL
+ DataProiectie DATE NOT NULL
 );
+
+
 -- Tabel Bilete
 CREATE TABLE Bilete (
  BiletID NUMBER PRIMARY KEY,
- ClientID NUMBER REFERENCES Clienti(ClientID),
+ ClientID NUMBER REFERENCES ClientiFilme(ClientID),
  ProgramareID NUMBER REFERENCES Programari(ProgramareID),
  Pret NUMBER(6, 2),
  DataAchizitie DATE DEFAULT SYSDATE
 );
--- Tabel Angajati
-CREATE TABLE Angajati (
- AngajatID NUMBER PRIMARY KEY,
- Nume VARCHAR2(50) NOT NULL,
- Prenume VARCHAR2(50),
- Functie VARCHAR2(50),
- Salariu NUMBER(10, 2)
-);
-ALTER TABLE Bilete
-ADD FilmID NUMBER;
-SELECT * FROM Bilete;
-ALTER TABLE Filme ADD Regizor VARCHAR2(100);
-ALTER TABLE Bilete MODIFY Pret NUMBER(8, 2);
-ALTER TABLE Clienti DROP COLUMN Email;
-ALTER TABLE Sali ADD CONSTRAINT chk_Capacitate CHECK (Capacitate > 0);
+
 --populare tabel Filme
 INSERT INTO Filme (FilmID, Titlu, Durata, Gen, AnLansare, Limba)
 VALUES (1, 'Avatar', 162, 'Science Fiction', 2009, 'Engleză');
@@ -71,155 +63,128 @@ INSERT INTO Filme (FilmID, Titlu, Durata, Gen, AnLansare, Limba)
 VALUES (9, 'The Lord of the Rings: The Return of the King', 201, 'Fantasy', 2003, 'Engleză');
 INSERT INTO Filme (FilmID, Titlu, Durata, Gen, AnLansare, Limba)
 VALUES (10, 'Casatoria', 95, 'Comedie', 2024, 'Romana');
+
+
+
 --populare tabel Sali
-INSERT INTO Sali (SalaID, Capacitate, Ecran3D)
-VALUES (1, 100, 'Y');
-INSERT INTO Sali (SalaID, Capacitate, Ecran3D)
-VALUES (2, 120, 'Y');
-INSERT INTO Sali (SalaID, Capacitate, Ecran3D)
-VALUES (3, 80, 'N');
-INSERT INTO Sali (SalaID, Capacitate, Ecran3D)
-VALUES (4, 150, 'Y');
-INSERT INTO Sali (SalaID, Capacitate, Ecran3D)
-VALUES (5, 60, 'N');
-INSERT INTO Sali (SalaID, Capacitate, Ecran3D)
-VALUES (6, 110, 'Y');
-INSERT INTO Sali (SalaID, Capacitate, Ecran3D)
-VALUES (7, 130, 'Y');
-INSERT INTO Sali (SalaID, Capacitate, Ecran3D)
-VALUES (8, 200, 'N');
-INSERT INTO Sali (SalaID, Capacitate, Ecran3D)
-VALUES (9, 90, 'N');
-INSERT INTO Sali (SalaID, Capacitate, Ecran3D)
-VALUES (10, 70, 'Y');
---populare tabel Clienti
-INSERT INTO Clienti (ClientID, Nume, Prenume, Telefon)
+INSERT INTO Sali (SalaID, Capacitate, FormatEcran)
+VALUES (1, 100, 'IMAX');
+INSERT INTO Sali (SalaID, Capacitate, FormatEcran)
+VALUES (2, 120, '3D');
+INSERT INTO Sali (SalaID, Capacitate, FormatEcran)
+VALUES (3, 80, '3D');
+INSERT INTO Sali (SalaID, Capacitate, FormatEcran)
+VALUES (4, 150, 'IMAX');
+INSERT INTO Sali (SalaID, Capacitate, FormatEcran)
+VALUES (5, 60, '3D');
+INSERT INTO Sali (SalaID, Capacitate, FormatEcran)
+VALUES (6, 110, '3D');
+INSERT INTO Sali (SalaID, Capacitate, FormatEcran)
+VALUES (7, 130, '3D');
+INSERT INTO Sali (SalaID, Capacitate, FormatEcran)
+VALUES (8, 200, 'IMAX');
+INSERT INTO Sali (SalaID, Capacitate, FormatEcran)
+VALUES (9, 90, '3D');
+INSERT INTO Sali (SalaID, Capacitate, FormatEcran)
+VALUES (10, 70, '2D');
+
+
+
+--populare tabel ClientiFilme
+INSERT INTO ClientiFilme (ClientID, Nume, Prenume, Telefon)
 VALUES (1, 'Popescu', 'Ion', '0723456789');
-INSERT INTO Clienti (ClientID, Nume, Prenume, Telefon)
+INSERT INTO ClientiFilme (ClientID, Nume, Prenume, Telefon)
 VALUES (2, 'Ionescu', 'Maria', '0741234567');
-INSERT INTO Clienti (ClientID, Nume, Prenume, Telefon)
+INSERT INTO ClientiFilme (ClientID, Nume, Prenume, Telefon)
 VALUES (3, 'Dumitrescu', 'Andrei', '0731234567');
-INSERT INTO Clienti (ClientID, Nume, Prenume, Telefon)
+INSERT INTO ClientiFilme (ClientID, Nume, Prenume, Telefon)
 VALUES (4, 'Stan', 'Ioana', '0729988776');
-INSERT INTO Clienti (ClientID, Nume, Prenume, Telefon)
+INSERT INTO ClientiFilme (ClientID, Nume, Prenume, Telefon)
 VALUES (5, 'Pop', 'Mihai', '0765432198');
-INSERT INTO Clienti (ClientID, Nume, Prenume, Telefon)
+INSERT INTO ClientiFilme (ClientID, Nume, Prenume, Telefon)
 VALUES (6, 'Georgescu', 'Adrian', '0759988776');
-INSERT INTO Clienti (ClientID, Nume, Prenume, Telefon)
+INSERT INTO ClientiFilme (ClientID, Nume, Prenume, Telefon)
 VALUES (7, 'Vasilescu', 'Elena', '0744332211');
-INSERT INTO Clienti (ClientID, Nume, Prenume, Telefon)
+INSERT INTO ClientiFilme (ClientID, Nume, Prenume, Telefon)
 VALUES (8, 'Enescu', 'Oana', '0771234599');
-INSERT INTO Clienti (ClientID, Nume, Prenume, Telefon)
+INSERT INTO ClientiFilme (ClientID, Nume, Prenume, Telefon)
 VALUES (9, 'Iliescu', 'Carmen', '0721122334');
-INSERT INTO Clienti (ClientID, Nume, Prenume, Telefon)
+INSERT INTO ClientiFilme (ClientID, Nume, Prenume, Telefon)
 VALUES (10, 'Radu', 'Dan', '0755566778');
+
+
 --populare tabel Programari
-INSERT INTO Programari (ProgramareID, FilmID, SalaID, OraProiectie)
-VALUES (1, 1, 1, TO_DATE('2024-12-16 18:00', 'YYYY-MM-DD HH24:MI'));
-INSERT INTO Programari (ProgramareID, FilmID, SalaID, OraProiectie)
-VALUES (2, 2, 2, TO_DATE('2024-12-16 20:00', 'YYYY-MM-DD HH24:MI'));
-INSERT INTO Programari (ProgramareID, FilmID, SalaID, OraProiectie)
-VALUES (3, 3, 3, TO_DATE('2024-12-16 22:00', 'YYYY-MM-DD HH24:MI'));
-INSERT INTO Programari (ProgramareID, FilmID, SalaID, OraProiectie)
-VALUES (4, 4, 4, TO_DATE('2024-12-17 18:00', 'YYYY-MM-DD HH24:MI'));
-INSERT INTO Programari (ProgramareID, FilmID, SalaID, OraProiectie)
-VALUES (5, 5, 5, TO_DATE('2024-12-17 20:00', 'YYYY-MM-DD HH24:MI'));
-INSERT INTO Programari (ProgramareID, FilmID, SalaID, OraProiectie)
-VALUES (6, 6, 6, TO_DATE('2024-12-17 22:00', 'YYYY-MM-DD HH24:MI'));
-INSERT INTO Programari (ProgramareID, FilmID, SalaID, OraProiectie)
-VALUES (7, 7, 7, TO_DATE('2024-12-18 18:00', 'YYYY-MM-DD HH24:MI'));
-INSERT INTO Programari (ProgramareID, FilmID, SalaID, OraProiectie)
-VALUES (8, 8, 8, TO_DATE('2024-12-18 20:00', 'YYYY-MM-DD HH24:MI'));
-INSERT INTO Programari (ProgramareID, FilmID, SalaID, OraProiectie)
-VALUES (9, 9, 9, TO_DATE('2024-12-18 22:00', 'YYYY-MM-DD HH24:MI'));
-INSERT INTO Programari (ProgramareID, FilmID, SalaID, OraProiectie)
-VALUES (10, 10, 10, TO_DATE('2024-12-19 18:00', 'YYYY-MM-DD HH24:MI'));
+INSERT INTO Programari (ProgramareID, FilmID, SalaID, DataProiectie)
+VALUES (1, 1, 1, TO_DATE('2024-12-16', 'YYYY-MM-DD'));
+INSERT INTO Programari (ProgramareID, FilmID, SalaID, DataProiectie)
+VALUES (2, 2, 2, TO_DATE('2024-12-16', 'YYYY-MM-DD'));
+INSERT INTO Programari (ProgramareID, FilmID, SalaID, DataProiectie)
+VALUES (3, 3, 3, TO_DATE('2024-12-16', 'YYYY-MM-DD'));
+INSERT INTO Programari (ProgramareID, FilmID, SalaID, DataProiectie)
+VALUES (4, 4, 4, TO_DATE('2024-12-17', 'YYYY-MM-DD'));
+INSERT INTO Programari (ProgramareID, FilmID, SalaID, DataProiectie)
+VALUES (5, 5, 5, TO_DATE('2024-12-17', 'YYYY-MM-DD'));
+INSERT INTO Programari (ProgramareID, FilmID, SalaID, DataProiectie)
+VALUES (6, 6, 6, TO_DATE('2024-12-17', 'YYYY-MM-DD'));
+INSERT INTO Programari (ProgramareID, FilmID, SalaID, DataProiectie)
+VALUES (7, 7, 7, TO_DATE('2024-12-18', 'YYYY-MM-DD'));
+INSERT INTO Programari (ProgramareID, FilmID, SalaID, DataProiectie)
+VALUES (8, 8, 8, TO_DATE('2024-12-18', 'YYYY-MM-DD'));
+INSERT INTO Programari (ProgramareID, FilmID, SalaID, DataProiectie)
+VALUES (9, 9, 9, TO_DATE('2024-12-18', 'YYYY-MM-DD'));
+INSERT INTO Programari (ProgramareID, FilmID, SalaID, DataProiectie)
+VALUES (10, 10, 10, TO_DATE('2024-12-19', 'YYYY-MM-DD'));
+
+
+
 --populare tabel Bilete
-INSERT INTO Bilete (BiletID, ClientID, ProgramareID, FilmID, Pret, DataAchizitie)
-VALUES (1, 1, 1, 1, 30.00, TO_DATE('2024-12-10', 'YYYY-MM-DD'));
-INSERT INTO Bilete (BiletID, ClientID, ProgramareID, FilmID, Pret, DataAchizitie)
-VALUES (2, 2, 2, 2, 35.00, TO_DATE('2024-12-10', 'YYYY-MM-DD'));
-INSERT INTO Bilete (BiletID, ClientID, ProgramareID, FilmID, Pret, DataAchizitie)
-VALUES (3, 3, 3, 3, 28.00, TO_DATE('2024-12-11', 'YYYY-MM-DD'));
-INSERT INTO Bilete (BiletID, ClientID, ProgramareID, FilmID, Pret, DataAchizitie)
-VALUES (4, 4, 4, 4, 40.00, TO_DATE('2024-12-11', 'YYYY-MM-DD'));
-INSERT INTO Bilete (BiletID, ClientID, ProgramareID, FilmID, Pret, DataAchizitie)
-VALUES (5, 5, 5, 5, 32.50, TO_DATE('2024-12-12', 'YYYY-MM-DD'));
-INSERT INTO Bilete (BiletID, ClientID, ProgramareID, FilmID, Pret, DataAchizitie)
-VALUES (6, 6, 6, 6, 45.00, TO_DATE('2024-12-12', 'YYYY-MM-DD'));
-INSERT INTO Bilete (BiletID, ClientID, ProgramareID, FilmID, Pret, DataAchizitie)
-VALUES (7, 7, 7, 7, 30.00, TO_DATE('2024-12-13', 'YYYY-MM-DD'));
-INSERT INTO Bilete (BiletID, ClientID, ProgramareID, FilmID, Pret, DataAchizitie)
-VALUES (8, 8, 8, 8, 25.00, TO_DATE('2024-12-13', 'YYYY-MM-DD'));
-INSERT INTO Bilete (BiletID, ClientID, ProgramareID, FilmID, Pret, DataAchizitie)
-VALUES (9, 9, 9, 9, 38.00, TO_DATE('2024-12-14', 'YYYY-MM-DD'));
-INSERT INTO Bilete (BiletID, ClientID, ProgramareID, FilmID, Pret, DataAchizitie)
-VALUES (10, 10, 10, 10, 35.00, TO_DATE('2024-12-14', 'YYYY-MM-DD'));
-UPDATE Filme
-SET Durata = 165
-WHERE FilmID = 1;
-UPDATE Sali
-SET Capacitate = 120
-WHERE SalaID = 1;
-DROP TABLE Angajati CASCADE CONSTRAINTS;
-CREATE TABLE Angajati (
- AngajatID NUMBER PRIMARY KEY,
- Nume VARCHAR2(50) NOT NULL,
- Prenume VARCHAR2(50),
- Functie VARCHAR2(50),
- Salariu NUMBER(10, 2)
-);
--- Filme din 2014 și 2009 (UNION)
-SELECT Titlu FROM Filme WHERE AnLansare = 2014
-UNION
-SELECT Titlu FROM Filme WHERE AnLansare = 2009;
--- Filme doar din 2014, dar nu din 2009 (MINUS)
-SELECT Titlu FROM Filme WHERE AnLansare = 2014
-MINUS
-SELECT Titlu FROM Filme WHERE AnLansare = 2009;
--- Filme atât din 2014 cât și din 2009 (INTERSECT)
-SELECT Titlu FROM Filme WHERE AnLansare = 2014
-INTERSECT
-SELECT Titlu FROM Filme WHERE AnLansare = 2009;
--- Funcții de grup
-SELECT Gen, AVG(Durata) AS DurataMedie FROM Filme GROUP BY Gen;
--- Funcții numerice și de timp
-SELECT Titlu, ROUND(Durata / 60, 2) AS DurataOre FROM Filme;
-SELECT TO_CHAR(SYSDATE, 'DD-MON-YYYY') AS DataCurenta FROM DUAL;
--- Expresii DECODE și CASE
-SELECT Titlu, DECODE(Gen, 'Science Fiction', 'SF', 'Altele') AS Categorie
-FROM Filme;
-SELECT Titlu,
- CASE
- WHEN Durata > 150 THEN 'Lung'
- ELSE 'Scurt'
- END AS DurataFilm
-FROM Filme;
--- Filme mai lungi decât cel mai scurt film din genul "Science Fiction"
-SELECT Titlu FROM Filme
-WHERE Durata > (SELECT MIN(Durata) FROM Filme WHERE Gen = 'Science Fiction');
-select * from Filme;
--- Afișarea proiecțiilor, cu sălile și filmele corespunzătoare
-SELECT p.ProgramareID, f.Titlu, s.SalaID, p.OraProiectie
-FROM Programari p
-JOIN Filme f ON p.FilmID = f.FilmID
-JOIN Sali s ON p.SalaID = s.SalaID
-SELECT * FROM Filme;
-SELECT * FROM Sali;
-SELECT * FROM Clienti;
-SELECT * FROM Programari;
-SELECT * FROM Bilete;
-SELECT * FROM Angajati;
---Crearea unui view
-CREATE VIEW VedereProiectii AS
-SELECT f.Titlu, p.OraProiectie, s.SalaID
-FROM Programari p
-JOIN Filme f ON p.FilmID = f.FilmID
-JOIN Sali s ON p.SalaID = s.SalaID;
---index
-CREATE INDEX idx_Filme_Gen ON Filme(Gen);
---sequence
-CREATE SEQUENCE seq_Bilete START WITH 1 INCREMENT BY 1;
---sinonim
-CREATE SYNONYM FilmeCinema FOR Filme;
-select * from VedereProiectii;
+INSERT INTO Bilete (BiletID, ClientID, ProgramareID,  Pret, DataAchizitie)
+VALUES (1, 1, 1,  30.00, TO_DATE('2024-12-10', 'YYYY-MM-DD'));
+INSERT INTO Bilete (BiletID, ClientID, ProgramareID,  Pret, DataAchizitie)
+VALUES (2, 2, 2, 35.00, TO_DATE('2024-12-10', 'YYYY-MM-DD'));
+INSERT INTO Bilete (BiletID, ClientID, ProgramareID,  Pret, DataAchizitie)
+VALUES (3, 3, 3,  28.00, TO_DATE('2024-12-11', 'YYYY-MM-DD'));
+INSERT INTO Bilete (BiletID, ClientID, ProgramareID,  Pret, DataAchizitie)
+VALUES (4, 4, 4,  40.00, TO_DATE('2024-12-11', 'YYYY-MM-DD'));
+INSERT INTO Bilete (BiletID, ClientID, ProgramareID, Pret, DataAchizitie)
+VALUES (5, 5, 5,  32.50, TO_DATE('2024-12-12', 'YYYY-MM-DD'));
+INSERT INTO Bilete (BiletID, ClientID, ProgramareID,  Pret, DataAchizitie)
+VALUES (6, 6, 6,  45.00, TO_DATE('2024-12-12', 'YYYY-MM-DD'));
+INSERT INTO Bilete (BiletID, ClientID, ProgramareID,  Pret, DataAchizitie)
+VALUES (7, 7, 7,  30.00, TO_DATE('2024-12-13', 'YYYY-MM-DD'));
+INSERT INTO Bilete (BiletID, ClientID, ProgramareID,  Pret, DataAchizitie)
+VALUES (8, 8, 8,  25.00, TO_DATE('2024-12-13', 'YYYY-MM-DD'));
+INSERT INTO Bilete (BiletID, ClientID, ProgramareID,  Pret, DataAchizitie)
+VALUES (9, 9, 9,  38.00, TO_DATE('2024-12-14', 'YYYY-MM-DD'));
+INSERT INTO Bilete (BiletID, ClientID, ProgramareID, Pret, DataAchizitie)
+VALUES (10, 10, 10, 35.00, TO_DATE('2024-12-14', 'YYYY-MM-DD'));
+--Aici am adaugat bilete in plus cumparate de clientii existenti
+INSERT INTO Bilete (BiletID, ClientID, ProgramareID, Pret, DataAchizitie)
+VALUES (11, 2, 1, 30.00, TO_DATE('2024-12-10', 'YYYY-MM-DD'));
+
+INSERT INTO Bilete (BiletID, ClientID, ProgramareID, Pret, DataAchizitie)
+VALUES (12, 3, 1, 30.00, TO_DATE('2024-12-10', 'YYYY-MM-DD'));
+
+INSERT INTO Bilete (BiletID, ClientID, ProgramareID, Pret, DataAchizitie)
+VALUES (13, 4, 2, 35.00, TO_DATE('2024-12-11', 'YYYY-MM-DD'));
+
+INSERT INTO Bilete (BiletID, ClientID, ProgramareID, Pret, DataAchizitie)
+VALUES (14, 5, 2, 35.00, TO_DATE('2024-12-11', 'YYYY-MM-DD'));
+
+INSERT INTO Bilete (BiletID, ClientID, ProgramareID, Pret, DataAchizitie)
+VALUES (15, 6, 3, 28.00, TO_DATE('2024-12-12', 'YYYY-MM-DD'));
+
+INSERT INTO Bilete (BiletID, ClientID, ProgramareID, Pret, DataAchizitie)
+VALUES (16, 7, 3, 28.00, TO_DATE('2024-12-12', 'YYYY-MM-DD'));
+
+INSERT INTO Bilete (BiletID, ClientID, ProgramareID, Pret, DataAchizitie)
+VALUES (17, 8, 4, 40.00, TO_DATE('2024-12-13', 'YYYY-MM-DD'));
+
+INSERT INTO Bilete (BiletID, ClientID, ProgramareID, Pret, DataAchizitie)
+VALUES (18, 9, 4, 40.00, TO_DATE('2024-12-13', 'YYYY-MM-DD'));
+
+INSERT INTO Bilete (BiletID, ClientID, ProgramareID, Pret, DataAchizitie)
+VALUES (19, 10, 5, 32.50, TO_DATE('2024-12-14', 'YYYY-MM-DD'));
+
+INSERT INTO Bilete (BiletID, ClientID, ProgramareID, Pret, DataAchizitie)
+VALUES (20, 1, 5, 32.50, TO_DATE('2024-12-14', 'YYYY-MM-DD'));
